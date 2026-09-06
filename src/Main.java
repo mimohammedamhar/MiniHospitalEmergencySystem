@@ -3,18 +3,14 @@ public class Main {
     public static void main(String[] args) {
 
         PatientBST patientBST = new PatientBST();
-        EmergencyQueue emergencyQueue = new EmergencyQueue();
 
         System.out.println("========================================");
         System.out.println(" MINI HOSPITAL EMERGENCY SYSTEM");
-        System.out.println(" EMERGENCY QUEUE TEST");
+        System.out.println(" PATIENT BST TEST");
         System.out.println("========================================");
 
-        /*
-         * Create test patients.
-         */
         Patient patient1 = new Patient(
-                101,
+                50,
                 "Ahmed",
                 24,
                 "0771234567",
@@ -22,7 +18,7 @@ public class Main {
         );
 
         Patient patient2 = new Patient(
-                102,
+                30,
                 "Nimal",
                 35,
                 "0712345678",
@@ -30,184 +26,218 @@ public class Main {
         );
 
         Patient patient3 = new Patient(
-                103,
+                70,
                 "Fathima",
                 29,
                 "0755555555",
                 "Headache"
         );
 
-        /*
-         * Register patients in the Patient BST first.
-         */
-        patientBST.insert(patient1);
-        patientBST.insert(patient2);
-        patientBST.insert(patient3);
+        Patient patient4 = new Patient(
+                20,
+                "Sunil",
+                48,
+                "0766666666",
+                "Breathing Difficulty"
+        );
 
+        Patient patient5 = new Patient(
+                40,
+                "Ayesha",
+                19,
+                "0788888888",
+                "Injury"
+        );
+
+        Patient patient6 = new Patient(
+                60,
+                "Kamal",
+                42,
+                "0722222222",
+                "Stomach Pain"
+        );
+
+        Patient patient7 = new Patient(
+                80,
+                "Sara",
+                31,
+                "0744444444",
+                "Back Pain"
+        );
+
+        /*
+         * Test 1:
+         * Insert patients into the BST.
+         */
         System.out.println();
-        System.out.println("Registered patients:");
+        System.out.println("TEST 1: INSERT PATIENTS");
+        System.out.println("----------------------------------------");
+
+        insertPatient(patientBST, patient1);
+        insertPatient(patientBST, patient2);
+        insertPatient(patientBST, patient3);
+        insertPatient(patientBST, patient4);
+        insertPatient(patientBST, patient5);
+        insertPatient(patientBST, patient6);
+        insertPatient(patientBST, patient7);
+
+        /*
+         * Test 2:
+         * Try to insert a duplicate Patient ID.
+         */
+        System.out.println();
+        System.out.println("TEST 2: INSERT DUPLICATE PATIENT");
+        System.out.println("----------------------------------------");
+
+        Patient duplicatePatient = new Patient(
+                50,
+                "Duplicate Patient",
+                20,
+                "0700000000",
+                "Test Condition"
+        );
+
+        insertPatient(patientBST, duplicatePatient);
+
+        /*
+         * Test 3:
+         * Display patients using inorder traversal.
+         */
+        System.out.println();
+        System.out.println("TEST 3: INORDER TRAVERSAL");
 
         patientBST.displayInOrder();
 
         /*
-         * Test 1:
-         * Display an empty queue.
-         */
-        System.out.println();
-        System.out.println("TEST 1: DISPLAY EMPTY QUEUE");
-        System.out.println("----------------------------------------");
-
-        emergencyQueue.displayQueue();
-
-        /*
-         * Test 2:
-         * Try to dequeue from an empty queue.
-         */
-        System.out.println();
-        System.out.println("TEST 2: DEQUEUE EMPTY QUEUE");
-        System.out.println("----------------------------------------");
-
-        Patient emptyResult = emergencyQueue.dequeue();
-
-        if (emptyResult == null) {
-            System.out.println(
-                    "Empty queue was handled successfully."
-            );
-        }
-
-        /*
-         * Test 3:
-         * Add patients to the queue.
-         */
-        System.out.println();
-        System.out.println("TEST 3: ENQUEUE PATIENTS");
-        System.out.println("----------------------------------------");
-
-        addPatientToQueue(emergencyQueue, patient1);
-        addPatientToQueue(emergencyQueue, patient2);
-        addPatientToQueue(emergencyQueue, patient3);
-
-        /*
          * Test 4:
-         * Display all waiting patients.
+         * Display the BST tree structure.
          */
         System.out.println();
-        System.out.println("TEST 4: DISPLAY WAITING PATIENTS");
+        System.out.println("TEST 4: BST STRUCTURE");
 
-        emergencyQueue.displayQueue();
+        patientBST.displayTreeStructure();
 
         /*
          * Test 5:
-         * Attempt to add the same patient again.
+         * Search for an existing patient.
          */
         System.out.println();
-        System.out.println("TEST 5: DUPLICATE QUEUE ENTRY");
+        System.out.println("TEST 5: SEARCH EXISTING PATIENT");
         System.out.println("----------------------------------------");
 
-        addPatientToQueue(emergencyQueue, patient2);
+        searchAndDisplayPatient(patientBST, 40);
 
         /*
          * Test 6:
-         * View the next patient without removing the patient.
+         * Search for a patient who does not exist.
          */
         System.out.println();
-        System.out.println("TEST 6: PEEK NEXT PATIENT");
+        System.out.println("TEST 6: SEARCH MISSING PATIENT");
         System.out.println("----------------------------------------");
 
-        Patient nextPatient = emergencyQueue.peek();
-
-        if (nextPatient != null) {
-            System.out.println("Next patient for treatment:");
-            nextPatient.displayPatient();
-        }
+        searchAndDisplayPatient(patientBST, 99);
 
         /*
          * Test 7:
-         * Dequeue the first patient.
+         * Delete a leaf node.
          *
-         * Patient 101 should be removed first
-         * because Patient 101 entered first.
+         * Patient 20 does not have any children.
          */
         System.out.println();
-        System.out.println("TEST 7: DEQUEUE FIRST PATIENT");
+        System.out.println("TEST 7: DELETE LEAF NODE");
         System.out.println("----------------------------------------");
 
-        sendNextPatientForTreatment(emergencyQueue);
-
-        System.out.println();
-        System.out.println("QUEUE AFTER FIRST DEQUEUE");
-
-        emergencyQueue.displayQueue();
+        deletePatient(patientBST, 20);
+        patientBST.displayInOrder();
 
         /*
          * Test 8:
-         * Dequeue the remaining patients.
+         * Delete a node with two children.
+         *
+         * Patient 50 is the root node.
          */
         System.out.println();
-        System.out.println("TEST 8: DEQUEUE REMAINING PATIENTS");
+        System.out.println("TEST 8: DELETE NODE WITH TWO CHILDREN");
         System.out.println("----------------------------------------");
 
-        sendNextPatientForTreatment(emergencyQueue);
-        sendNextPatientForTreatment(emergencyQueue);
+        deletePatient(patientBST, 50);
+        patientBST.displayInOrder();
 
         /*
          * Test 9:
-         * Confirm that the queue is now empty.
+         * Try to delete a patient who does not exist.
          */
         System.out.println();
-        System.out.println("TEST 9: FINAL EMPTY QUEUE");
+        System.out.println("TEST 9: DELETE MISSING PATIENT");
         System.out.println("----------------------------------------");
 
-        emergencyQueue.displayQueue();
-
-        System.out.println(
-                "Final queue size: " + emergencyQueue.getSize()
-        );
+        deletePatient(patientBST, 999);
 
         /*
-         * Test 10:
-         * Try to dequeue one more time.
+         * Final tree structure.
          */
         System.out.println();
-        System.out.println("TEST 10: DEQUEUE AFTER QUEUE IS EMPTY");
-        System.out.println("----------------------------------------");
+        System.out.println("FINAL BST STRUCTURE");
 
-        sendNextPatientForTreatment(emergencyQueue);
+        patientBST.displayTreeStructure();
     }
 
-    private static void addPatientToQueue(
-            EmergencyQueue emergencyQueue,
+    private static void insertPatient(
+            PatientBST patientBST,
             Patient patient) {
 
-        boolean added = emergencyQueue.enqueue(patient);
+        boolean inserted = patientBST.insert(patient);
 
-        if (added) {
+        if (inserted) {
             System.out.println(
                     "Patient "
                             + patient.getPatientId()
                             + " - "
                             + patient.getPatientName()
-                            + " added to the emergency queue."
+                            + " inserted successfully."
+            );
+        } else {
+            System.out.println(
+                    "Patient ID "
+                            + patient.getPatientId()
+                            + " already exists. Insertion failed."
             );
         }
     }
 
-    private static void sendNextPatientForTreatment(
-            EmergencyQueue emergencyQueue) {
+    private static void searchAndDisplayPatient(
+            PatientBST patientBST,
+            int patientId) {
 
-        Patient patient = emergencyQueue.dequeue();
+        Patient patient = patientBST.search(patientId);
 
-        if (patient != null) {
+        if (patient == null) {
             System.out.println(
-                    "Patient "
-                            + patient.getPatientId()
-                            + " - "
-                            + patient.getPatientName()
-                            + " removed from the queue."
+                    "No patient found with ID " + patientId + "."
             );
+        } else {
+            System.out.println("Patient found successfully:");
+            patient.displayPatient();
+        }
+    }
 
+    private static void deletePatient(
+            PatientBST patientBST,
+            int patientId) {
+
+        boolean deleted = patientBST.delete(patientId);
+
+        if (deleted) {
             System.out.println(
-                    "The patient has been sent for treatment."
+                    "Patient ID "
+                            + patientId
+                            + " deleted successfully."
+            );
+        } else {
+            System.out.println(
+                    "Cannot delete. No patient found with ID "
+                            + patientId
+                            + "."
             );
         }
     }
