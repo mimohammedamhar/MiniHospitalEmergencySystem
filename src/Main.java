@@ -2,243 +2,295 @@ public class Main {
 
     public static void main(String[] args) {
 
-        PatientBST patientBST = new PatientBST();
+        TreatmentStack treatmentStack =
+                new TreatmentStack();
 
         System.out.println("========================================");
         System.out.println(" MINI HOSPITAL EMERGENCY SYSTEM");
-        System.out.println(" PATIENT BST TEST");
+        System.out.println(" TREATMENT STACK TEST");
         System.out.println("========================================");
 
-        Patient patient1 = new Patient(
-                50,
-                "Ahmed",
-                24,
-                "0771234567",
-                "High Fever"
-        );
+        /*
+         * Create sample treatment records.
+         */
+        TreatmentRecord treatment1 =
+                new TreatmentRecord(
+                        "T001",
+                        101,
+                        "Ahmed",
+                        "07/09/2026",
+                        "Dr. Silva",
+                        "Viral Fever",
+                        "Medication and Rest"
+                );
 
-        Patient patient2 = new Patient(
-                30,
-                "Nimal",
-                35,
-                "0712345678",
-                "Chest Pain"
-        );
+        TreatmentRecord treatment2 =
+                new TreatmentRecord(
+                        "T002",
+                        102,
+                        "Nimal",
+                        "07/09/2026",
+                        "Dr. Perera",
+                        "Chest Muscle Pain",
+                        "Pain Relief Medication"
+                );
 
-        Patient patient3 = new Patient(
-                70,
-                "Fathima",
-                29,
-                "0755555555",
-                "Headache"
-        );
-
-        Patient patient4 = new Patient(
-                20,
-                "Sunil",
-                48,
-                "0766666666",
-                "Breathing Difficulty"
-        );
-
-        Patient patient5 = new Patient(
-                40,
-                "Ayesha",
-                19,
-                "0788888888",
-                "Injury"
-        );
-
-        Patient patient6 = new Patient(
-                60,
-                "Kamal",
-                42,
-                "0722222222",
-                "Stomach Pain"
-        );
-
-        Patient patient7 = new Patient(
-                80,
-                "Sara",
-                31,
-                "0744444444",
-                "Back Pain"
-        );
+        TreatmentRecord treatment3 =
+                new TreatmentRecord(
+                        "T003",
+                        103,
+                        "Fathima",
+                        "07/09/2026",
+                        "Dr. Fernando",
+                        "Migraine",
+                        "Migraine Medication"
+                );
 
         /*
          * Test 1:
-         * Insert patients into the BST.
+         * Display an empty stack.
          */
         System.out.println();
-        System.out.println("TEST 1: INSERT PATIENTS");
+        System.out.println("TEST 1: DISPLAY EMPTY STACK");
         System.out.println("----------------------------------------");
 
-        insertPatient(patientBST, patient1);
-        insertPatient(patientBST, patient2);
-        insertPatient(patientBST, patient3);
-        insertPatient(patientBST, patient4);
-        insertPatient(patientBST, patient5);
-        insertPatient(patientBST, patient6);
-        insertPatient(patientBST, patient7);
+        treatmentStack.displayStack();
 
         /*
          * Test 2:
-         * Try to insert a duplicate Patient ID.
+         * Pop from an empty stack.
          */
         System.out.println();
-        System.out.println("TEST 2: INSERT DUPLICATE PATIENT");
+        System.out.println("TEST 2: POP EMPTY STACK");
         System.out.println("----------------------------------------");
 
-        Patient duplicatePatient = new Patient(
-                50,
-                "Duplicate Patient",
-                20,
-                "0700000000",
-                "Test Condition"
-        );
+        TreatmentRecord emptyResult =
+                treatmentStack.pop();
 
-        insertPatient(patientBST, duplicatePatient);
+        if (emptyResult == null) {
+            System.out.println(
+                    "Empty stack was handled successfully."
+            );
+        }
 
         /*
          * Test 3:
-         * Display patients using inorder traversal.
+         * Push treatment records.
          */
         System.out.println();
-        System.out.println("TEST 3: INORDER TRAVERSAL");
+        System.out.println("TEST 3: PUSH TREATMENT RECORDS");
+        System.out.println("----------------------------------------");
 
-        patientBST.displayInOrder();
+        addTreatmentRecord(
+                treatmentStack,
+                treatment1
+        );
+
+        addTreatmentRecord(
+                treatmentStack,
+                treatment2
+        );
+
+        addTreatmentRecord(
+                treatmentStack,
+                treatment3
+        );
 
         /*
          * Test 4:
-         * Display the BST tree structure.
+         * Display treatment records.
          */
         System.out.println();
-        System.out.println("TEST 4: BST STRUCTURE");
+        System.out.println("TEST 4: DISPLAY TREATMENT STACK");
 
-        patientBST.displayTreeStructure();
+        treatmentStack.displayStack();
 
         /*
          * Test 5:
-         * Search for an existing patient.
+         * Attempt to add a duplicate Treatment ID.
          */
         System.out.println();
-        System.out.println("TEST 5: SEARCH EXISTING PATIENT");
+        System.out.println("TEST 5: DUPLICATE TREATMENT ID");
         System.out.println("----------------------------------------");
 
-        searchAndDisplayPatient(patientBST, 40);
+        TreatmentRecord duplicateTreatment =
+                new TreatmentRecord(
+                        "T002",
+                        104,
+                        "Duplicate Patient",
+                        "07/09/2026",
+                        "Dr. Test",
+                        "Test Diagnosis",
+                        "Test Treatment"
+                );
+
+        addTreatmentRecord(
+                treatmentStack,
+                duplicateTreatment
+        );
 
         /*
          * Test 6:
-         * Search for a patient who does not exist.
+         * View the latest treatment without removing it.
          */
         System.out.println();
-        System.out.println("TEST 6: SEARCH MISSING PATIENT");
+        System.out.println("TEST 6: PEEK LATEST TREATMENT");
         System.out.println("----------------------------------------");
 
-        searchAndDisplayPatient(patientBST, 99);
+        TreatmentRecord latestRecord =
+                treatmentStack.peek();
+
+        if (latestRecord != null) {
+            System.out.println(
+                    "Latest treatment record:"
+            );
+            latestRecord.displayTreatmentRecord();
+        }
 
         /*
          * Test 7:
-         * Delete a leaf node.
-         *
-         * Patient 20 does not have any children.
+         * Search for an existing Treatment ID.
          */
         System.out.println();
-        System.out.println("TEST 7: DELETE LEAF NODE");
+        System.out.println("TEST 7: SEARCH EXISTING TREATMENT");
         System.out.println("----------------------------------------");
 
-        deletePatient(patientBST, 20);
-        patientBST.displayInOrder();
+        searchAndDisplayTreatment(
+                treatmentStack,
+                "T002"
+        );
 
         /*
          * Test 8:
-         * Delete a node with two children.
-         *
-         * Patient 50 is the root node.
+         * Search for a missing Treatment ID.
          */
         System.out.println();
-        System.out.println("TEST 8: DELETE NODE WITH TWO CHILDREN");
+        System.out.println("TEST 8: SEARCH MISSING TREATMENT");
         System.out.println("----------------------------------------");
 
-        deletePatient(patientBST, 50);
-        patientBST.displayInOrder();
+        searchAndDisplayTreatment(
+                treatmentStack,
+                "T999"
+        );
 
         /*
          * Test 9:
-         * Try to delete a patient who does not exist.
+         * Remove the most recently completed treatment.
+         *
+         * T003 must be removed first because
+         * it was added last.
          */
         System.out.println();
-        System.out.println("TEST 9: DELETE MISSING PATIENT");
+        System.out.println("TEST 9: POP LATEST TREATMENT");
         System.out.println("----------------------------------------");
 
-        deletePatient(patientBST, 999);
+        removeLatestTreatment(treatmentStack);
+
+        System.out.println();
+        System.out.println("STACK AFTER FIRST POP");
+
+        treatmentStack.displayStack();
 
         /*
-         * Final tree structure.
+         * Test 10:
+         * Remove the remaining records.
          */
         System.out.println();
-        System.out.println("FINAL BST STRUCTURE");
+        System.out.println("TEST 10: POP REMAINING RECORDS");
+        System.out.println("----------------------------------------");
 
-        patientBST.displayTreeStructure();
+        removeLatestTreatment(treatmentStack);
+        removeLatestTreatment(treatmentStack);
+
+        /*
+         * Test 11:
+         * Confirm that the stack is empty.
+         */
+        System.out.println();
+        System.out.println("TEST 11: FINAL EMPTY STACK");
+        System.out.println("----------------------------------------");
+
+        treatmentStack.displayStack();
+
+        System.out.println(
+                "Final stack size: "
+                        + treatmentStack.getSize()
+        );
+
+        /*
+         * Test 12:
+         * Pop again after the stack is empty.
+         */
+        System.out.println();
+        System.out.println("TEST 12: POP AFTER STACK IS EMPTY");
+        System.out.println("----------------------------------------");
+
+        removeLatestTreatment(treatmentStack);
     }
 
-    private static void insertPatient(
-            PatientBST patientBST,
-            Patient patient) {
+    private static void addTreatmentRecord(
+            TreatmentStack treatmentStack,
+            TreatmentRecord treatmentRecord) {
 
-        boolean inserted = patientBST.insert(patient);
+        boolean added =
+                treatmentStack.push(treatmentRecord);
 
-        if (inserted) {
+        if (added) {
             System.out.println(
-                    "Patient "
-                            + patient.getPatientId()
+                    "Treatment "
+                            + treatmentRecord.getTreatmentId()
+                            + " for Patient "
+                            + treatmentRecord.getPatientId()
+                            + " added to the stack successfully."
+            );
+        }
+    }
+
+    private static void removeLatestTreatment(
+            TreatmentStack treatmentStack) {
+
+        TreatmentRecord removedRecord =
+                treatmentStack.pop();
+
+        if (removedRecord != null) {
+
+            System.out.println(
+                    "Treatment "
+                            + removedRecord.getTreatmentId()
+                            + " removed from the stack."
+            );
+
+            System.out.println(
+                    "Patient: "
+                            + removedRecord.getPatientId()
                             + " - "
-                            + patient.getPatientName()
-                            + " inserted successfully."
-            );
-        } else {
-            System.out.println(
-                    "Patient ID "
-                            + patient.getPatientId()
-                            + " already exists. Insertion failed."
+                            + removedRecord.getPatientName()
             );
         }
     }
 
-    private static void searchAndDisplayPatient(
-            PatientBST patientBST,
-            int patientId) {
+    private static void searchAndDisplayTreatment(
+            TreatmentStack treatmentStack,
+            String treatmentId) {
 
-        Patient patient = patientBST.search(patientId);
+        TreatmentRecord treatmentRecord =
+                treatmentStack.search(treatmentId);
 
-        if (patient == null) {
+        if (treatmentRecord == null) {
+
             System.out.println(
-                    "No patient found with ID " + patientId + "."
-            );
-        } else {
-            System.out.println("Patient found successfully:");
-            patient.displayPatient();
-        }
-    }
-
-    private static void deletePatient(
-            PatientBST patientBST,
-            int patientId) {
-
-        boolean deleted = patientBST.delete(patientId);
-
-        if (deleted) {
-            System.out.println(
-                    "Patient ID "
-                            + patientId
-                            + " deleted successfully."
-            );
-        } else {
-            System.out.println(
-                    "Cannot delete. No patient found with ID "
-                            + patientId
+                    "No treatment record found with ID "
+                            + treatmentId
                             + "."
             );
+
+        } else {
+
+            System.out.println(
+                    "Treatment record found:"
+            );
+
+            treatmentRecord.displayTreatmentRecord();
         }
     }
 }
